@@ -17,6 +17,8 @@ import javafx.scene.control.CheckBox;
 public class Main extends Application {
 
     private Stage window;
+    Button login;
+    Button register;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -46,7 +48,7 @@ public class Main extends Application {
         line.setStroke(Color.LIGHTGREY);
 
         // login button
-        Button login = new Button("Login");
+        login = new Button("Login");
 
         //remember me option
         CheckBox remember = new CheckBox("Remember me");
@@ -91,7 +93,7 @@ public class Main extends Application {
         confPassword.setPromptText("Confirm your password");
 
         // register button
-        Button register = new Button("Register");
+        register = new Button("Register");
 
         GridPane.setConstraints(fName, 50, 46);
         GridPane.setConstraints(lName, 50, 47);
@@ -104,6 +106,10 @@ public class Main extends Application {
         GridPane.setConstraints(register, 50, 55);
         grid.getChildren().addAll(fName, lName, mail, phone, newUser, newPassword, confPassword, line4, register);
 
+        //action on clicking login/register
+
+        login.setOnAction(e -> loginClick());
+        register.setOnAction(e -> registerClick());
 
         Scene scene = new Scene(grid, 1300, 1020);
         scene.getStylesheets().add("FrontStylesheet.css");
@@ -112,6 +118,15 @@ public class Main extends Application {
         window.show();
     }
 
+    // When the user clicks login
+    private void loginClick(){
+
+    }
+
+    // When the user clicks register
+    private void registerClick(){
+        
+    }
 
     public static void main(String[] args) {
         launch(args);
