@@ -1,0 +1,27 @@
+.root {
+    -fx-background-color: lavender;
+}
+
+.text-field {
+    -fx-background-color: lavender;
+    -fx-border-style: hidden;
+}
+
+.password-field {
+    -fx-background-color: lavender;
+    -fx-border-style: hidden;
+}
+
+.button {
+    -fx-background-color: lavender;
+    -fx-background-radius: 4;
+    -fx-text-fill: gray;
+    -fx-border-width: 0.3;
+    -fx-border-style: solid;
+    -fx-border-color: gray;
+}
+
+.check-box {
+    -fx-font-size: 11;
+    -fx-font-family: "DejaVu Sans Light";
+}
