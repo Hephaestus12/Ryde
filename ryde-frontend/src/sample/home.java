@@ -64,7 +64,7 @@ public class home implements MapComponentInitializedListener {
     }
 
     private void searchDrop(String searchedLocation) {
-        
+
     }
 
     public AnchorPane getAnchorPane(){
@@ -99,10 +99,21 @@ public class home implements MapComponentInitializedListener {
                     .title("Drop Location");
 
             Marker dropMarker = new Marker(dropMarkerOptions);
+            googleMap.clearMarkers();
+            googleMap.addMarker(marker);
             googleMap.addMarker(dropMarker);
+            double distance = latLong.distanceFrom(new LatLong(17.5488, 78.5719));
+            this.labelDistance(distance);
         });
 
         googleMap.addMarker(marker);
+
+    }
+
+    private void labelDistance(double distance) {
+        String d = distance + "km";
+        Label label = new Label(d);
+       // anchorPane.getChildren().addAll(label);
 
     }
 
