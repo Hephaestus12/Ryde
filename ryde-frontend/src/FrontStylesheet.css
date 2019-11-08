@@ -5,6 +5,8 @@
 .text-field {
     -fx-background-color: lavender;
     -fx-border-style: hidden;
+    -fx-text-fill: gray;
+    -fx-prompt-text-fill: gray;
 }
 
 .password-field {

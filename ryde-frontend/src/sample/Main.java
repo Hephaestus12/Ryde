@@ -1,15 +1,16 @@
 package sample;
 
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.shape.Line;
 import javafx.scene.control.CheckBox;
@@ -19,6 +20,11 @@ public class Main extends Application {
     private Stage window;
     Button login;
     Button register;
+
+    // Layout variables for Maps
+    GridPane gridPane;
+    AnchorPane anchorPane;
+    Scene gMapView;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -108,7 +114,10 @@ public class Main extends Application {
 
         //action on clicking login/register
 
-        login.setOnAction(e -> loginClick());
+        login.setOnAction(e -> {
+            loginClick();
+            callMaps();
+        });
         register.setOnAction(e -> registerClick());
 
         Scene scene = new Scene(grid, 1300, 1020);
@@ -118,14 +127,30 @@ public class Main extends Application {
         window.show();
     }
 
+
+    // create a map
+    private void callMaps() {
+        gridPane = new GridPane();
+        anchorPane = new AnchorPane();
+
+        home maps = new home();
+        anchorPane = maps.getAnchorPane();
+
+        gridPane.getChildren().addAll(anchorPane);
+
+        gMapView = new Scene(gridPane, 1300, 1020);
+
+        window.setScene(gMapView);
+    }
+
     // When the user clicks login
-    private void loginClick(){
+    private void loginClick() {
 
     }
 
     // When the user clicks register
     private void registerClick(){
-        
+
     }
 
     public static void main(String[] args) {
