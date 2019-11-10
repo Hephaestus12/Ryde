@@ -133,7 +133,7 @@ public class home implements Initializable, MapComponentInitializedListener{
     }
 
     private void route() {
-        
+
     }
 
     public AnchorPane getAnchorPane(){
@@ -174,9 +174,7 @@ public class home implements Initializable, MapComponentInitializedListener{
             googleMap.clearMarkers();
             googleMap.addMarker(marker);
             googleMap.addMarker(dropMarker);
-
-            directionsService = new DirectionsService();
-            directionsPane = googleMapView.getDirec();
+            
         });
 
         googleMap.addMarker(marker);
@@ -188,8 +186,4 @@ public class home implements Initializable, MapComponentInitializedListener{
 
     }
 
-    @Override
-    public void directionsReceived(DirectionsResult directionsResult, DirectionStatus directionStatus) {
-
-    }
 }
