@@ -17,7 +17,8 @@ import javafx.scene.control.CheckBox;
 
 public class Main extends Application {
 
-    private Stage window;
+    private static Stage window;
+    static Scene scene;
     Button login;
     Button register;
 
@@ -120,7 +121,7 @@ public class Main extends Application {
         });
         register.setOnAction(e -> registerClick());
 
-        Scene scene = new Scene(grid, 1300, 1020);
+        scene = new Scene(grid, 1300, 1020);
         scene.getStylesheets().add("FrontStylesheet.css");
         window.setScene(scene);
 
@@ -140,6 +141,8 @@ public class Main extends Application {
 
         gMapView = new Scene(gridPane, 1300, 1020);
 
+        gMapView.getStylesheets().add("Home.css");
+
         window.setScene(gMapView);
     }
 
@@ -149,8 +152,13 @@ public class Main extends Application {
     }
 
     // When the user clicks register
-    private void registerClick(){
+    private void registerClick() {
 
+    }
+
+    // When the user clicks logout
+    public static void logoutClick() {
+        window.setScene(scene);
     }
 
     public static void main(String[] args) {

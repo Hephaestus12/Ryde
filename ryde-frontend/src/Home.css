@@ -1,0 +1,50 @@
+.text-field {
+    -fx-background-color: lavender;
+    -fx-text-fill: grey;
+    -fx-border-color: lightgrey;
+}
+
+.button {
+    -fx-background-color: lavender;
+    -fx-text-fill: grey;
+    -fx-border-color: lightgrey;
+}
+
+.label {
+    -fx-background-color: lavender;
+    -fx-text-fill: grey;
+    -fx-border-color: lightgrey;
+    -fx-font-size: 14;
+}
+
+#searchLocationButton {
+    -fx-background-color: beige;
+    -fx-text-fill: grey;
+    -fx-border-color: lightgrey;
+}
+
+#confirmTripButton {
+    -fx-background-color: palegreen;
+    -fx-text-fill: grey;
+    -fx-border-color: lightgrey;
+}
+
+#logout {
+    -fx-background-color: beige;
+    -fx-text-fill: grey;
+    -fx-border-color: lightgrey;
+}
+
+#addMoneyButton {
+    -fx-background-color: palegreen;
+    -fx-text-fill: grey;
+    -fx-border-color: lightgrey;
+}
+
+#walletBalanceInsufficient {
+    -fx-border-color: red;
+}
+
+#walletBalanceSufficient {
+    -fx-border-color: lightgrey;
+}
