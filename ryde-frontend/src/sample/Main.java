@@ -57,11 +57,9 @@ public class Main extends Application {
         // login button
         login = new Button("Login");
 
-        //remember me option
-        CheckBox remember = new CheckBox("Remember me");
         VBox log = new VBox();
         log.setSpacing(5);
-        log.getChildren().addAll(login, remember);
+        log.getChildren().addAll(login);
 
         GridPane.setConstraints(log, 80, 50);
 

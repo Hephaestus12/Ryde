@@ -77,6 +77,12 @@ public class home implements Initializable, MapComponentInitializedListener{
     Label routeNotFound1;
     Label routeNotFound2;
 
+    // driver details
+    Label heading;
+    Label driverName;
+    Label driverPhone;
+    Label driverRating;
+
     boolean pickup = true;
     boolean fixed = false;
     boolean notFound = false;
@@ -86,7 +92,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         anchorPane = new AnchorPane();
 
         // initialize the map
-        googleMapView = new GoogleMapView();
+        googleMapView = new GoogleMapView(/*"en-US", ""*/);
         googleMapView.addMapInializedListener(this);
         googleMapView.setPrefSize(1600,1600);
 
@@ -112,7 +118,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         recenterTextField = new TextField();
         recenterTextField.setPromptText("Recenter the map");
         recenterButton = new Button("Recenter");
-        recenterButton.setId("logout");
+        recenterButton.setId("recenterButton");
         recenterButton.setOnAction(e -> this.recenter(recenterTextField.getText()));
 
         AnchorPane.setLeftAnchor(recenterTextField, 70.0);
@@ -171,8 +177,10 @@ public class home implements Initializable, MapComponentInitializedListener{
     }
 
     private void confirm() {
+        this.driverDetails();
         if(walletBalance < 300) {
             insufficientLabel = new Label("You need a minimum balance of 300 to make a booking.");
+            insufficientLabel.setId("walletBalanceInsufficient");
 
             AnchorPane.setLeftAnchor(insufficientLabel, 70.0);
             AnchorPane.setTopAnchor(insufficientLabel, 470.0);
@@ -181,6 +189,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         }
         else if(fare > walletBalance) {
             insufficientLabel = new Label("Wallet Balance insufficient for the trip");
+            insufficientLabel.setId("walletBalanceInsufficient");
 
             AnchorPane.setLeftAnchor(insufficientLabel, 70.0);
             AnchorPane.setTopAnchor(insufficientLabel, 470.0);
@@ -194,6 +203,28 @@ public class home implements Initializable, MapComponentInitializedListener{
             walletBalance = walletBalance - fare;
             wallet.setText("Wallet Balance : " + '\u20B9' + walletBalance);
         }
+    }
+
+    private void driverDetails() {
+        heading = new Label("Driver Details");
+        driverName = new Label("Name : Tej Shirish Sukhatme");
+        driverPhone = new Label("Contact no. : 9920774469");
+        driverRating = new Label("Rating : 2.0 / 5.0");
+
+        heading.setId("heading");
+
+        driverName.setId("driverDetailsText");
+        driverPhone.setId("driverDetailsText");
+        driverRating.setId("driverDetailsText");
+
+        VBox vBox = new VBox();
+        vBox.setSpacing(3.0);
+        vBox.getChildren().addAll(heading, driverName, driverPhone, driverRating);
+        vBox.setId("driverDetails");
+
+        AnchorPane.setLeftAnchor(vBox, 700.0);
+
+        anchorPane.getChildren().add(vBox);
     }
 
     private void displayName() {
@@ -222,7 +253,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         AnchorPane.setRightAnchor(vBox, 70.0);
         AnchorPane.setTopAnchor(vBox, 50.0);
 
-        AnchorPane.setRightAnchor(logout, 201.0);
+        AnchorPane.setRightAnchor(logout, 255.0);
         AnchorPane.setTopAnchor(logout, 127.0);
 
         anchorPane.getChildren().addAll(vBox, logout);
@@ -235,13 +266,15 @@ public class home implements Initializable, MapComponentInitializedListener{
         addMoneyBy = new TextField();
         addMoneyBy.setPromptText("Amount");
 
+        addMoneyBy.setId("amount");
+
         addToWallet = new Button("Add");
 
-        AnchorPane.setRightAnchor(addMoneyBy, 93.0);
-        AnchorPane.setTopAnchor(addMoneyBy, 127.0);
+        AnchorPane.setRightAnchor(addMoneyBy, 147.0);
+        AnchorPane.setTopAnchor(addMoneyBy, 126.0);
 
-        AnchorPane.setRightAnchor(addToWallet, 93.0);
-        AnchorPane.setTopAnchor(addToWallet, 127.0);
+        AnchorPane.setRightAnchor(addToWallet, 147.0);
+        AnchorPane.setTopAnchor(addToWallet, 126.0);
 
         addToWallet.setId("addMoneyButton");
 
@@ -256,12 +289,12 @@ public class home implements Initializable, MapComponentInitializedListener{
         try {
             walletBalance = walletBalance + Integer.parseInt(addMoneyBy.getText());
             wallet.setText("Wallet Balance : " + '\u20B9' + walletBalance);
-            anchorPane.getChildren().removeAll(addToWallet, addMoneyBy);
+            anchorPane.getChildren().removeAll(addToWallet, addMoneyBy, insufficientLabel);
             AnchorPane.setTopAnchor(logout, 127.0);
             if(walletBalance >= 300)
                 wallet.setId("walletBalanceSufficient");
         } catch (Exception e) {
-            addMoneyBy.setId("walletBalanceInsufficient");
+            addMoneyBy.setId("walletError");
         }
     }
 
@@ -309,6 +342,7 @@ public class home implements Initializable, MapComponentInitializedListener{
     }
 
     private void distanceDisplay() {
+        this.driverDetails();
         if(distanceString != null) {
             distanceLabel = new Label("Distance : " + distanceString);
 
@@ -321,6 +355,10 @@ public class home implements Initializable, MapComponentInitializedListener{
             durationLabel = new Label("Duration : " + duration);
 
             fareLabel = new Label("Fare : " + '\u20B9' + fare);
+
+            distanceLabel.setId("rideInfo");
+            fareLabel.setId("rideInfo");
+            durationLabel.setId("rideInfo");
 
             confirmTrip = new Button("Confirm The Trip");
             confirmTrip.setId("confirmTripButton");
@@ -335,6 +373,7 @@ public class home implements Initializable, MapComponentInitializedListener{
             AnchorPane.setTopAnchor(durationLabel, 408.0);
             AnchorPane.setTopAnchor(fareLabel, 426.0);
             AnchorPane.setTopAnchor(confirmTrip, 444.0);
+
 
             anchorPane.getChildren().addAll(distanceLabel, fareLabel, durationLabel, confirmTrip);
         }
@@ -469,7 +508,7 @@ public class home implements Initializable, MapComponentInitializedListener{
                     dropLocationTextField.setPromptText("Locations fixed");
                     searchDropLocation.setText("Reset");
                     fixed = true;
-                    String url = /*"https://maps.googleapis.com/maps/api/distancematrix/json?origins="+*/ pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=";
+                    String url = /*"https://maps.googleapis.com/maps/api/distancematrix/json?origins="+*/pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=";
                     try {
                         this.getDistanceAndDuration(url);
                     } catch (IOException | JSONException e) {

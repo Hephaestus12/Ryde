@@ -1,26 +1,22 @@
 .root {
-    -fx-background-color: lavender;
+    -fx-background-color: linear-gradient(lavender, lavenderblush);
 }
 
 .text-field {
-    -fx-background-color: lavender;
+    -fx-background-color: linear-gradient(to right, lavender, lavenderblush);
     -fx-border-style: hidden;
     -fx-text-fill: gray;
     -fx-prompt-text-fill: gray;
 }
 
 .password-field {
-    -fx-background-color: lavender;
+    -fx-background-color: linear-gradient(to right, lavender, lavenderblush);
     -fx-border-style: hidden;
 }
 
 .button {
-    -fx-background-color: lavender;
-    -fx-background-radius: 4;
+    -fx-background-color: linear-gradient(to left ,lavender, lavenderblush);
     -fx-text-fill: gray;
-    -fx-border-width: 0.3;
-    -fx-border-style: solid;
-    -fx-border-color: gray;
 }
 
 .check-box {

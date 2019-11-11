@@ -1,50 +1,80 @@
 .text-field {
-    -fx-background-color: lavender;
+    -fx-background-color: transparent;
     -fx-text-fill: grey;
-    -fx-border-color: lightgrey;
-}
-
-.button {
-    -fx-background-color: lavender;
-    -fx-text-fill: grey;
-    -fx-border-color: lightgrey;
+    -fx-border-color: grey;
+    -fx-prompt-text-fill: grey;
 }
 
 .label {
-    -fx-background-color: lavender;
-    -fx-text-fill: grey;
-    -fx-border-color: lightgrey;
-    -fx-font-size: 14;
+    -fx-background-color: transparent;
+    -fx-text-fill: linear-gradient(slateblue, darkslateblue);
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+}
+
+#rideInfo {
+    -fx-font-weight: normal;
+    -fx-text-fill: linear-gradient(black, dimgrey);
 }
 
 #searchLocationButton {
-    -fx-background-color: beige;
-    -fx-text-fill: grey;
+    -fx-background-color: linear-gradient(lightgrey, grey);
+    -fx-text-fill: white;
+    -fx-border-color: lightgrey;
+}
+
+#recenterButton {
+    -fx-background-color: linear-gradient(lightgrey, grey);
+    -fx-text-fill: white;
     -fx-border-color: lightgrey;
 }
 
 #confirmTripButton {
-    -fx-background-color: palegreen;
-    -fx-text-fill: grey;
+    -fx-background-color: linear-gradient(lightgreen, green);
+    -fx-text-fill: white;
     -fx-border-color: lightgrey;
 }
 
 #logout {
-    -fx-background-color: beige;
-    -fx-text-fill: grey;
+    -fx-background-color: linear-gradient(white, black);
+    -fx-text-fill: white;
     -fx-border-color: lightgrey;
 }
 
 #addMoneyButton {
-    -fx-background-color: palegreen;
-    -fx-text-fill: grey;
+    -fx-background-color: linear-gradient(lightgreen, green);
+    -fx-text-fill: white;
     -fx-border-color: lightgrey;
 }
 
 #walletBalanceInsufficient {
-    -fx-border-color: red;
+    -fx-text-fill: linear-gradient(red, darkred);
 }
 
 #walletBalanceSufficient {
+}
+
+#walletError {
+    -fx-background-color: linear-gradient(to right, maroon, red);
+    -fx-text-fill: white;
+}
+
+#amount {
+    -fx-background-color: linear-gradient(to left, lightgreen, green);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+}
+
+#driverDetails {
     -fx-border-color: lightgrey;
+    -fx-background-color: linear-gradient(lightgrey, grey);
+}
+
+#driverDetailsText {
+    -fx-font-weight: normal;
+    -fx-text-fill: white;
+}
+
+#heading {
+    -fx-font-style: italic;
 }
