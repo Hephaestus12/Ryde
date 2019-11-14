@@ -1,8 +1,8 @@
 .text-field {
     -fx-background-color: transparent;
-    -fx-text-fill: grey;
+    -fx-text-fill: darkred;
     -fx-border-color: grey;
-    -fx-prompt-text-fill: grey;
+    -fx-prompt-text-fill: darkred;
 }
 
 .label {

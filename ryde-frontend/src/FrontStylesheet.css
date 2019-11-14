@@ -1,6 +1,6 @@
 .root {
     -fx-background-image: url("logo.png");
-    -fx-background-color: linear-gradient(to right, darkred, mediumpurple, darkred);
+    -fx-background-color: linear-gradient(to right, black, mediumpurple, black);
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-background-size: 10%;
@@ -23,7 +23,7 @@
 
 
 .button {
-    -fx-background-color: linear-gradient(mediumpurple, purple);
+    -fx-background-color: linear-gradient(black, purple);
     -fx-text-fill: white;
     -fx-border-color: linear-gradient(to right, yellow, darkred);
 }
@@ -34,15 +34,15 @@
 }
 
 #registration {
-    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
+    -fx-background-color: linear-gradient(to right, black, mediumpurple);
 }
 
 #login {
-    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
+    -fx-background-color: linear-gradient(to right, black, mediumpurple);
 }
 
 #wrong {
     -fx-border-color: red;
-    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
+    -fx-background-color: linear-gradient(to right, black, mediumpurple);
     -fx-text-fill: white;
 }

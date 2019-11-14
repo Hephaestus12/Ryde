@@ -18,10 +18,13 @@ import entities.User;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint.*;
@@ -102,11 +105,13 @@ public class home implements Initializable, MapComponentInitializedListener{
     Driver driver;
     VBox vBox;
 
+    DropShadow dropShadow = new DropShadow();
+
     public home() {
         anchorPane = new AnchorPane();
 
         // initialize the map
-        googleMapView = new GoogleMapView();
+        googleMapView = new GoogleMapView("en-US", "AIzaSyBIFI_ArDQEz7f9azAZrvTUM8ZhdtxBqGU");
         googleMapView.addMapInializedListener(this);
         googleMapView.setPrefSize(1600,1600);
 
@@ -124,6 +129,24 @@ public class home implements Initializable, MapComponentInitializedListener{
         // search button to search the location
         searchDropLocation = new Button("Search Pickup Location");
         searchDropLocation.setId("searchLocationButton");
+
+        searchDropLocation.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        searchDropLocation.setEffect(dropShadow);
+                    }
+                });
+
+        searchDropLocation.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        searchDropLocation.setEffect(null);
+                    }
+                });
+
+
         anchorPane.getChildren().add(searchDropLocation);
         AnchorPane.setLeftAnchor(searchDropLocation, 70.0);
         AnchorPane.setTopAnchor(searchDropLocation,328.0);
@@ -133,6 +156,23 @@ public class home implements Initializable, MapComponentInitializedListener{
         recenterTextField.setPromptText("Recenter the map");
         recenterButton = new Button("Recenter");
         recenterButton.setId("recenterButton");
+
+        recenterButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        recenterButton.setEffect(dropShadow);
+                    }
+                });
+
+        recenterButton.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        recenterButton.setEffect(null);
+                    }
+                });
+
         recenterButton.setOnAction(e -> this.recenter(recenterTextField.getText()));
 
         AnchorPane.setLeftAnchor(recenterTextField, 70.0);
@@ -145,6 +185,7 @@ public class home implements Initializable, MapComponentInitializedListener{
 
         this.displayName();
 
+
         searchDropLocation.setOnAction( e -> {
             if(fixed){
                 pickupLatLong = null;
@@ -154,7 +195,7 @@ public class home implements Initializable, MapComponentInitializedListener{
                 dropLocationTextField.setPromptText("Enter Pickup Location");
                 googleMap.clearMarkers();
                 searchDropLocation.setText("Search Pickup Location");
-                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip, vBox);
+                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip, vBox, insufficientLabel);
 
                 if(notFound) {
                     anchorPane.getChildren().removeAll(routeNotFound1, routeNotFound2);
@@ -179,7 +220,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         anchorPane = new AnchorPane();
 
         // initialize the map
-        googleMapView = new GoogleMapView();
+        googleMapView = new GoogleMapView("en-US", "AIzaSyBIFI_ArDQEz7f9azAZrvTUM8ZhdtxBqGU");
         googleMapView.addMapInializedListener(this);
         googleMapView.setPrefSize(1600,1600);
 
@@ -197,6 +238,24 @@ public class home implements Initializable, MapComponentInitializedListener{
         // search button to search the location
         searchDropLocation = new Button("Search Pickup Location");
         searchDropLocation.setId("searchLocationButton");
+
+        searchDropLocation.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        searchDropLocation.setEffect(dropShadow);
+                    }
+                });
+
+        searchDropLocation.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        searchDropLocation.setEffect(null);
+                    }
+                });
+
+
         anchorPane.getChildren().add(searchDropLocation);
         AnchorPane.setLeftAnchor(searchDropLocation, 70.0);
         AnchorPane.setTopAnchor(searchDropLocation,328.0);
@@ -206,6 +265,23 @@ public class home implements Initializable, MapComponentInitializedListener{
         recenterTextField.setPromptText("Recenter the map");
         recenterButton = new Button("Recenter");
         recenterButton.setId("recenterButton");
+
+        recenterButton.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        recenterButton.setEffect(dropShadow);
+                    }
+                });
+
+        recenterButton.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        recenterButton.setEffect(null);
+                    }
+                });
+
         recenterButton.setOnAction(e -> this.recenter(recenterTextField.getText()));
 
         AnchorPane.setLeftAnchor(recenterTextField, 70.0);
@@ -215,6 +291,8 @@ public class home implements Initializable, MapComponentInitializedListener{
         AnchorPane.setTopAnchor(recenterButton, 228.0);
 
         anchorPane.getChildren().addAll(recenterTextField, recenterButton);
+
+
 
         this.displayName();
 
@@ -227,7 +305,13 @@ public class home implements Initializable, MapComponentInitializedListener{
                 dropLocationTextField.setPromptText("Enter Pickup Location");
                 googleMap.clearMarkers();
                 searchDropLocation.setText("Search Pickup Location");
-                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip, vBox);
+                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip, vBox, insufficientLabel);
+
+                distanceLabel = null;
+                fareLabel = null;
+                durationLabel = null;
+
+                distanceString = null;
 
                 if(notFound) {
                     anchorPane.getChildren().removeAll(routeNotFound1, routeNotFound2);
@@ -326,7 +410,41 @@ public class home implements Initializable, MapComponentInitializedListener{
         carNo.setId("driverDetailsText");
 
         startTrip = new Button("Start Trip ");
+
+        startTrip.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        startTrip.setEffect(dropShadow);
+                    }
+                });
+
+        startTrip.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        startTrip.setEffect(null);
+                    }
+
+                });
+
         endTrip = new Button("End Trip");
+
+        endTrip.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        endTrip.setEffect(dropShadow);
+                    }
+                });
+
+        endTrip.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        endTrip.setEffect(null);
+                    }
+                });
 
         startTrip.setId("tripToggle");
         endTrip.setId("tripToggle");
@@ -350,14 +468,16 @@ public class home implements Initializable, MapComponentInitializedListener{
         //System.out.println(driver.getAvailability());
 
         startTrip.setOnAction(e -> {
+
+            startTrip.setId("tripStarted");
+            startTrip.setText("Trip Started");
+
             MongoClient mongoClient = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
             MongoDBDriverDAO mongoDBDriverDAO = new MongoDBDriverDAO(mongoClient);
             mongoDBDriverDAO.makeUnavailable(driver);
 
             //System.out.println(driver.getAvailability());
 
-            startTrip.setId("tripStarted");
-            startTrip.setText("Trip Started");
         });
 
         endTrip.setOnAction(e -> {
@@ -392,6 +512,22 @@ public class home implements Initializable, MapComponentInitializedListener{
 
         logout = new Button("Logout");
 
+        logout.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        logout.setEffect(dropShadow);
+                    }
+                });
+
+        logout.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        logout.setEffect(null);
+                    }
+                });
+
 
         wallet = new Label("Wallet Balance : " + '\u20B9' + user.getWallet());
 
@@ -400,6 +536,22 @@ public class home implements Initializable, MapComponentInitializedListener{
 
         addMoney = new Button("Add money");
         addMoney.setId("addMoneyButton");
+
+        addMoney.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        addMoney.setEffect(dropShadow);
+                    }
+                });
+
+        addMoney.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        addMoney.setEffect(null);
+                    }
+                });
 
         VBox vBox = new VBox();
         vBox.setSpacing(3.0);
@@ -427,6 +579,22 @@ public class home implements Initializable, MapComponentInitializedListener{
         addMoneyBy.setId("amount");
 
         addToWallet = new Button("Add");
+
+        addToWallet.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        addToWallet.setEffect(dropShadow);
+                    }
+                });
+
+        addToWallet.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        addToWallet.setEffect(null);
+                    }
+                });
 
         AnchorPane.setRightAnchor(addMoneyBy, 147.0);
         AnchorPane.setTopAnchor(addMoneyBy, 126.0);
@@ -476,6 +644,8 @@ public class home implements Initializable, MapComponentInitializedListener{
             if( geocodingResults.length > 0 )
                 dropLatLong = new LatLong(geocodingResults[0].getGeometry().getLocation().getLatitude(), geocodingResults[0].getGeometry().getLocation().getLongitude());
 
+            System.out.println(dropLatLong);
+
 
             googleMap.setCenter(dropLatLong);
 
@@ -486,7 +656,7 @@ public class home implements Initializable, MapComponentInitializedListener{
 
             Marker dropMarker = new Marker(dropMarkerOptions);
             googleMap.addMarker(dropMarker);
-            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=";
+            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=AIzaSyBIFI_ArDQEz7f9azAZrvTUM8ZhdtxBqGU";
             try {
                 this.getDistanceAndDuration(url);
             } catch (IOException | JSONException e) {
@@ -521,6 +691,22 @@ public class home implements Initializable, MapComponentInitializedListener{
 
             confirmTrip = new Button("Confirm The Trip");
             confirmTrip.setId("confirmTripButton");
+
+            confirmTrip.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                    new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent e) {
+                            confirmTrip.setEffect(dropShadow);
+                        }
+                    });
+
+            confirmTrip.addEventHandler(MouseEvent.MOUSE_EXITED,
+                    new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent e) {
+                            confirmTrip.setEffect(null);
+                        }
+                    });
 
             confirmTrip.setOnAction(e -> this.confirm());
 
@@ -590,6 +776,8 @@ public class home implements Initializable, MapComponentInitializedListener{
             if( results.length > 0 )
                 pickupLatLong = new LatLong(results[0].getGeometry().getLocation().getLatitude(), results[0].getGeometry().getLocation().getLongitude());
 
+            System.out.println(pickupLatLong);
+
             googleMap.setCenter(pickupLatLong);
 
             MarkerOptions pickupMarkerOptions = new MarkerOptions();
@@ -648,6 +836,7 @@ public class home implements Initializable, MapComponentInitializedListener{
 
                 if(pickup){
                     pickupLatLong = latLong;
+                    System.out.println(pickupLatLong);
                     pickup = false;
                     dropLocationTextField.setPromptText("Enter Drop Location");
                     searchDropLocation.setText("Search Drop Location");
@@ -662,12 +851,13 @@ public class home implements Initializable, MapComponentInitializedListener{
                     googleMap.addMarker(pickupMarker);
 
                     dropLatLong = latLong;
+                    System.out.println(dropLatLong);
                     fixed = true;
                     pickup = true;
                     dropLocationTextField.setPromptText("Locations fixed");
                     searchDropLocation.setText("Reset");
                     fixed = true;
-                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=";
+                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=AIzaSyBIFI_ArDQEz7f9azAZrvTUM8ZhdtxBqGU";
                     try {
                         this.getDistanceAndDuration(url);
                     } catch (IOException | JSONException e) {

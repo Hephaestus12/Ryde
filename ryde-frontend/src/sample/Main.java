@@ -1,16 +1,22 @@
 package sample;
 
+import com.lynden.gmapsfx.javascript.event.GMapMouseEvent;
+import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import dao.MongoDBUserDAO;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -175,6 +181,41 @@ public class Main extends Application {
         GridPane.setConstraints(register, 40, 55);
         GridPane.setConstraints(wrongRegister, 40, 56);
         grid.getChildren().addAll(fName, lName, mail, phone, newUser, newPassword, confPassword, line4, register, wrongRegister);
+
+        DropShadow dropShadow = new DropShadow();
+        //Adding the shadow when the mouse cursor is on
+        login.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        login.setEffect(dropShadow);
+                    }
+                });
+
+        login.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        login.setEffect(null);
+                    }
+                });
+
+        register.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        register.setEffect(dropShadow);
+                    }
+                });
+
+        register.addEventHandler(MouseEvent.MOUSE_EXITED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent e) {
+                        register.setEffect(null);
+                    }
+                });
+
 
         //action on clicking login/register
 
