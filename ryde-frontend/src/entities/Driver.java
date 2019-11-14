@@ -10,11 +10,11 @@ public class Driver {
     private String latitude;
     private String longitude;
     private String rating;
-    private boolean availability;
+    private String availability;
 
     //getters and setters
 
-    public boolean isAvailable(){
+    public String getAvailability(){
         return this.availability;
     }
 
@@ -43,7 +43,7 @@ public class Driver {
     }
 
     public String getRating() {
-        return rating;
+        return (rating + "");
     }
 
     public void setId(String id) {
@@ -74,7 +74,7 @@ public class Driver {
         this.rating = rating;
     }
 
-    public void setAvailability(boolean availability) {
+    public void setAvailability(String availability) {
         this.availability = availability;
     }
 }

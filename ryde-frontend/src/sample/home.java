@@ -100,7 +100,7 @@ public class home implements Initializable, MapComponentInitializedListener{
 
     User user;
     Driver driver;
-
+    VBox vBox;
 
     public home() {
         anchorPane = new AnchorPane();
@@ -154,7 +154,7 @@ public class home implements Initializable, MapComponentInitializedListener{
                 dropLocationTextField.setPromptText("Enter Pickup Location");
                 googleMap.clearMarkers();
                 searchDropLocation.setText("Search Pickup Location");
-                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip);
+                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip, vBox);
 
                 if(notFound) {
                     anchorPane.getChildren().removeAll(routeNotFound1, routeNotFound2);
@@ -227,7 +227,7 @@ public class home implements Initializable, MapComponentInitializedListener{
                 dropLocationTextField.setPromptText("Enter Pickup Location");
                 googleMap.clearMarkers();
                 searchDropLocation.setText("Search Pickup Location");
-                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip);
+                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip, vBox);
 
                 if(notFound) {
                     anchorPane.getChildren().removeAll(routeNotFound1, routeNotFound2);
@@ -299,6 +299,11 @@ public class home implements Initializable, MapComponentInitializedListener{
 
         mongo.close();
 
+        if(driver == null) {
+            confirmTrip.setText("No Drivers Found");
+            confirmTrip.setId("noDrivers");
+        }
+
         MarkerOptions driverMarkerOptions = new MarkerOptions();
         driverMarkerOptions.position(new LatLong(Double.parseDouble(driver.getLatitude()), Double.parseDouble(driver.getLongitude())))
                 .visible(Boolean.TRUE)
@@ -320,7 +325,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         driverRating.setId("driverDetailsText");
         carNo.setId("driverDetailsText");
 
-        startTrip = new Button("Start Trip");
+        startTrip = new Button("Start Trip ");
         endTrip = new Button("End Trip");
 
         startTrip.setId("tripToggle");
@@ -332,7 +337,7 @@ public class home implements Initializable, MapComponentInitializedListener{
 
         hBox.getChildren().addAll(startTrip, endTrip);
 
-        VBox vBox = new VBox();
+        vBox = new VBox();
         vBox.setSpacing(3.0);
         vBox.getChildren().addAll(heading, driverName, driverPhone, driverRating, carNo, hBox);
         vBox.setId("driverDetails");
@@ -342,10 +347,14 @@ public class home implements Initializable, MapComponentInitializedListener{
 
         anchorPane.getChildren().add(vBox);
 
+        //System.out.println(driver.getAvailability());
+
         startTrip.setOnAction(e -> {
             MongoClient mongoClient = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
             MongoDBDriverDAO mongoDBDriverDAO = new MongoDBDriverDAO(mongoClient);
             mongoDBDriverDAO.makeUnavailable(driver);
+
+            //System.out.println(driver.getAvailability());
 
             startTrip.setId("tripStarted");
             startTrip.setText("Trip Started");
@@ -355,6 +364,7 @@ public class home implements Initializable, MapComponentInitializedListener{
             MongoClient mongoClient = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
             MongoDBDriverDAO mongoDBDriverDAO = new MongoDBDriverDAO(mongoClient);
             mongoDBDriverDAO.makeAvailable(driver);
+
 
             walletBalance = walletBalance - fare;
             user.cutFare(fare);
@@ -476,7 +486,7 @@ public class home implements Initializable, MapComponentInitializedListener{
 
             Marker dropMarker = new Marker(dropMarkerOptions);
             googleMap.addMarker(dropMarker);
-            String url = /*"https://maps.googleapis.com/maps/api/distancematrix/json?origins="+*/pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=";
+            String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=";
             try {
                 this.getDistanceAndDuration(url);
             } catch (IOException | JSONException e) {
@@ -611,7 +621,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         // initializing the map
         mapOptions.center(new LatLong(17.5488, 78.5719))
                 .mapType(MapTypeIdEnum.ROADMAP)
-                .zoom(12);
+                .zoom(14);
 
         googleMap = googleMapView.createMap(mapOptions);
 
@@ -657,7 +667,7 @@ public class home implements Initializable, MapComponentInitializedListener{
                     dropLocationTextField.setPromptText("Locations fixed");
                     searchDropLocation.setText("Reset");
                     fixed = true;
-                    String url = /*"https://maps.googleapis.com/maps/api/distancematrix/json?origins="+*/pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=AIz";
+                    String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=";
                     try {
                         this.getDistanceAndDuration(url);
                     } catch (IOException | JSONException e) {

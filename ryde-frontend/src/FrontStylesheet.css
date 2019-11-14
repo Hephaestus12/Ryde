@@ -44,4 +44,5 @@
 #wrong {
     -fx-border-color: red;
     -fx-background-color: linear-gradient(to right, purple, mediumpurple);
+    -fx-text-fill: white;
 }

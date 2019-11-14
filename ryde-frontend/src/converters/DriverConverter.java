@@ -39,7 +39,7 @@ public class DriverConverter {
     public static Driver toDriver(Document doc) {
         Driver d = new Driver();
         d.setName((String) doc.get("Name"));
-        d.setAvailability(((String) doc.get("availability")).equals("yes"));
+        d.setAvailability((String) doc.get("availability"));
         d.setPhoneNo(((long)doc.get("Phone no.")+""));
         d.setLatitude((String) doc.get("latitude"));
         d.setLongitude((String) doc.get("longitude"));

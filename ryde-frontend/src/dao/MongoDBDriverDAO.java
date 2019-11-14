@@ -44,7 +44,7 @@ public class MongoDBDriverDAO {
     }
     public Driver findClosest(LatLong pickupLatLong){
          Iterator iterator = this.col.find().iterator();
-         double min = 1000000;
+         double min = 20000.0;
          String minCarNo = "";
          Document doc;
         while (iterator.hasNext()){
@@ -53,20 +53,28 @@ public class MongoDBDriverDAO {
             String lat2 = (String) doc.get("latitude");
             String lon2 = (String) doc.get("longitude");
 
-            //System.out.println(doc);
+            String avail = (String) doc.get("availability");
 
             LatLong driverLatLong = new LatLong(Double.parseDouble(lat2), Double.parseDouble(lon2));
 
             double distance = findDistance(pickupLatLong, driverLatLong);
-            if(min>distance){
+            if(min>distance && avail.equals("yes")){
                 min = distance;
+                minCarNo = (String) doc.get("car no");
+            } else if (min == distance && avail.equals("yes")) {
                 minCarNo = (String) doc.get("car no");
             }
         }
-        doc = (Document) this.col.find(eq("car no", minCarNo)).first();
+        if(min < 20000.0) {
+            doc = (Document) this.col.find(eq("car no", minCarNo)).first();
 
-        Driver d = DriverConverter.toDriver(doc);
-        return DriverConverter.toDriver(doc);
+            Driver d = DriverConverter.toDriver(doc);
+            return DriverConverter.toDriver(doc);
+        }
+        else {
+            System.out.println("Not found");
+            return null;
+        }
     }
 
 

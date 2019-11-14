@@ -309,7 +309,7 @@ public class Main extends Application {
             phone.setId("nothing");
             return false;
         }
-        else if(mobileNo1.length() != 10 || mobileParse(mobileNo1)) {
+        else if(mobileNo1.length() != 10 ) {
                 wrongRegister.setId("label");
                 wrongRegister.setText("Wrong phone no.");
                 newPassword.setId("nothing");
@@ -342,15 +342,6 @@ public class Main extends Application {
 
     }
 
-    private boolean mobileParse(String mobileNo1) {
-        boolean x = true;
-        try {
-            Long a = Long.parseLong(mobileNo1);
-        } catch (Exception e) {
-            x = false;
-        }
-        return x;
-    }
 
     // When the user clicks logout
     public static void logoutClick() {

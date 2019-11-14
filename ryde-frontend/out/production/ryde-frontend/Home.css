@@ -59,6 +59,10 @@
     -fx-text-fill: white;
 }
 
+#noDrivers {
+    -fx-background-color: linear-gradient(darkred, red);
+}
+
 #amount {
     -fx-background-color: linear-gradient(to left, lightgreen, green);
     -fx-text-fill: white;
