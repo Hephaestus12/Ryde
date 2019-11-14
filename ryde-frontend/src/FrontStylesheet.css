@@ -1,25 +1,47 @@
 .root {
-    -fx-background-color: linear-gradient(lavender, lavenderblush);
+    -fx-background-image: url("logo.png");
+    -fx-background-color: linear-gradient(to right, darkred, mediumpurple, darkred);
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 10%;
+}
+
+#label {
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(red, darkred);
 }
 
 .text-field {
-    -fx-background-color: linear-gradient(to right, lavender, lavenderblush);
-    -fx-border-style: hidden;
-    -fx-text-fill: gray;
-    -fx-prompt-text-fill: gray;
+    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
 }
 
 .password-field {
-    -fx-background-color: linear-gradient(to right, lavender, lavenderblush);
-    -fx-border-style: hidden;
+    -fx-background-color: linear-gradient(to left, lavender, mediumpurple);
 }
 
+
 .button {
-    -fx-background-color: linear-gradient(to left ,lavender, lavenderblush);
-    -fx-text-fill: gray;
+    -fx-background-color: linear-gradient(mediumpurple, purple);
+    -fx-text-fill: white;
+    -fx-border-color: linear-gradient(to right, yellow, darkred);
 }
 
 .check-box {
     -fx-font-size: 11;
     -fx-font-family: "DejaVu Sans Light";
+}
+
+#registration {
+    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
+}
+
+#login {
+    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
+}
+
+#wrong {
+    -fx-border-color: red;
+    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
 }

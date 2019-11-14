@@ -13,7 +13,7 @@
 }
 
 #rideInfo {
-    -fx-font-weight: normal;
+    -fx-font-weight: bold;
     -fx-text-fill: linear-gradient(black, dimgrey);
 }
 
@@ -77,4 +77,18 @@
 
 #heading {
     -fx-font-style: italic;
+}
+
+#tripToggle {
+    -fx-border-color: grey;
+    -fx-background-color: linear-gradient(lavenderblush, mediumpurple);
+}
+
+#tripStarted {
+    -fx-background-color: linear-gradient(lavenderblush, lavender);
+    -fx-text-fill: grey;
+}
+
+#hBox {
+    -fx-background-color: linear-gradient(lavender, lavenderblush);
 }
