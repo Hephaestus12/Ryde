@@ -106,7 +106,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         anchorPane = new AnchorPane();
 
         // initialize the map
-        googleMapView = new GoogleMapView(/*"en-US", "AIzaSyBIFI_ArDQEz7f9azAZrvTUM8ZhdtxBqGU"*/);
+        googleMapView = new GoogleMapView();
         googleMapView.addMapInializedListener(this);
         googleMapView.setPrefSize(1600,1600);
 
@@ -179,7 +179,7 @@ public class home implements Initializable, MapComponentInitializedListener{
         anchorPane = new AnchorPane();
 
         // initialize the map
-        googleMapView = new GoogleMapView(/*"en-US", "AIzaSyBIFI_ArDQEz7f9azAZrvTUM8ZhdtxBqGU"*/);
+        googleMapView = new GoogleMapView();
         googleMapView.addMapInializedListener(this);
         googleMapView.setPrefSize(1600,1600);
 
@@ -476,7 +476,7 @@ public class home implements Initializable, MapComponentInitializedListener{
 
             Marker dropMarker = new Marker(dropMarkerOptions);
             googleMap.addMarker(dropMarker);
-            String url = /*"https://maps.googleapis.com/maps/api/distancematrix/json?origins="+*/pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=AIzaSyBIFI_ArDQEz7f9azAZrvTUM8ZhdtxBqGU";
+            String url = /*"https://maps.googleapis.com/maps/api/distancematrix/json?origins="+*/pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=";
             try {
                 this.getDistanceAndDuration(url);
             } catch (IOException | JSONException e) {
@@ -657,7 +657,7 @@ public class home implements Initializable, MapComponentInitializedListener{
                     dropLocationTextField.setPromptText("Locations fixed");
                     searchDropLocation.setText("Reset");
                     fixed = true;
-                    String url = /*"https://maps.googleapis.com/maps/api/distancematrix/json?origins="+*/pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=AIzaSyBIFI_ArDQEz7f9azAZrvTUM8ZhdtxBqGU";
+                    String url = /*"https://maps.googleapis.com/maps/api/distancematrix/json?origins="+*/pickupLatLong.getLatitude()+","+pickupLatLong.getLongitude()+"&destinations="+dropLatLong.getLatitude()+","+dropLatLong.getLongitude()+"&mode=driving&key=AIz";
                     try {
                         this.getDistanceAndDuration(url);
                     } catch (IOException | JSONException e) {
