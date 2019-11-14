@@ -1,5 +1,8 @@
 package sample;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import dao.MongoDBUserDAO;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.geometry.Insets;
@@ -15,6 +18,8 @@ import javafx.stage.Stage;
 import javafx.scene.shape.Line;
 import javafx.scene.control.CheckBox;
 
+import entities.*;
+
 public class Main extends Application {
 
     private static Stage window;
@@ -26,6 +31,33 @@ public class Main extends Application {
     GridPane gridPane;
     AnchorPane anchorPane;
     Scene gMapView;
+
+    User user;
+
+    private String id1;
+    private String username1;
+    private String firstName1;
+    private String lastName1;
+    private String email1;
+    private String mobileNo1;
+    private String password1;
+    private String password3;
+    private int wallet1;
+
+    private String username2;
+    private String password2;
+
+    private TextField username;
+    private PasswordField password;
+    Label wrong;
+
+    private TextField fName;
+    private TextField lName;
+    private TextField phone;
+    private TextField newUser;
+    private TextField newPassword;
+    private TextField confPassword;
+    private TextField mail;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -40,14 +72,21 @@ public class Main extends Application {
         /*   login   */
 
         //username
-        TextField username = new TextField();
+        username = new TextField();
         username.setPromptText("username");
         GridPane.setConstraints(username, 80, 47);
 
+
         //password
-        PasswordField password = new PasswordField();
+        password = new PasswordField();
         password.setPromptText("password");
         GridPane.setConstraints(password, 80, 48);
+
+        // wrong username / password label
+
+        wrong = new Label();
+        GridPane.setConstraints(wrong, 80, 50);
+
 
         // line between username and password
         Line line = new Line(500, 500, 700 ,500);
@@ -59,7 +98,7 @@ public class Main extends Application {
 
         VBox log = new VBox();
         log.setSpacing(5);
-        log.getChildren().addAll(login);
+        log.getChildren().addAll(login, wrong);
 
         GridPane.setConstraints(log, 80, 50);
 
@@ -70,54 +109,82 @@ public class Main extends Application {
         Line line4 = new Line(500, 500, 700 ,500); line4.setStroke(Color.LIGHTGREY);
 
         // First name
-        TextField fName = new TextField();
+        fName = new TextField();
         fName.setPromptText("First Name");
 
+
         // Last name
-        TextField lName = new TextField();
+        lName = new TextField();
         lName.setPromptText("Last Name");
 
+
         // E-mail
-        TextField mail = new TextField();
+        mail = new TextField();
         mail.setPromptText("E-mail");
 
+
         // Phone no,
-        TextField phone = new TextField();
+        phone = new TextField();
         phone.setPromptText("Mobile no.");
 
+
         // username
-        TextField newUser = new TextField();
+        newUser = new TextField();
         newUser.setPromptText("Create a username");
 
+
         // password
-        PasswordField newPassword = new PasswordField();
+        newPassword = new PasswordField();
         newPassword.setPromptText("Create a password");
 
+
         // confirm your password
-        PasswordField confPassword = new PasswordField();
+        confPassword = new PasswordField();
         confPassword.setPromptText("Confirm your password");
 
-        // register button
+
+        // register buttonsest(Stri
         register = new Button("Register");
 
-        GridPane.setConstraints(fName, 50, 46);
-        GridPane.setConstraints(lName, 50, 47);
-        GridPane.setConstraints(mail, 50, 48);
-        GridPane.setConstraints(phone, 50, 49);
-        GridPane.setConstraints(line4, 50, 50);
-        GridPane.setConstraints(newUser, 50, 51);
-        GridPane.setConstraints(newPassword, 50, 52);
-        GridPane.setConstraints(confPassword, 50, 53);
-        GridPane.setConstraints(register, 50, 55);
+        fName.setId("registration");
+        lName.setId("registration");
+        phone.setId("registration");
+        mail.setId("registration");
+        newUser.setId("registration");
+        newPassword.setId("registration");
+        confPassword.setId("registration");
+
+        username.setId("login");
+        password.setId("login");
+
+
+
+
+        GridPane.setConstraints(fName, 40, 46);
+        GridPane.setConstraints(lName, 40, 47);
+        GridPane.setConstraints(mail, 40, 48);
+        GridPane.setConstraints(phone, 40, 49);
+        GridPane.setConstraints(line4, 40, 50);
+        GridPane.setConstraints(newUser, 40, 51);
+        GridPane.setConstraints(newPassword, 40, 52);
+        GridPane.setConstraints(confPassword, 40, 53);
+        GridPane.setConstraints(register, 40, 55);
         grid.getChildren().addAll(fName, lName, mail, phone, newUser, newPassword, confPassword, line4, register);
 
         //action on clicking login/register
 
         login.setOnAction(e -> {
-            loginClick();
-            callMaps();
+            if(loginClick()) {
+                System.out.println("Calling maps");
+                callMaps();
+            }
         });
-        register.setOnAction(e -> registerClick());
+        register.setOnAction(e -> {
+            if(registerClick()) {
+                System.out.println("Calling maps");
+                callMaps();
+            }
+        });
 
         scene = new Scene(grid, 1300, 1020);
         scene.getStylesheets().add("FrontStylesheet.css");
@@ -132,7 +199,7 @@ public class Main extends Application {
         gridPane = new GridPane();
         anchorPane = new AnchorPane();
 
-        home maps = new home();
+        home maps = new home(user);
         anchorPane = maps.getAnchorPane();
 
         gridPane.getChildren().addAll(anchorPane);
@@ -145,12 +212,88 @@ public class Main extends Application {
     }
 
     // When the user clicks login
-    private void loginClick() {
+    private boolean loginClick() {
 
+        username2 = username.getText().trim();
+        password2 = password.getText().trim();
+
+        MongoClient mongo = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
+        MongoDBUserDAO userDAO = new MongoDBUserDAO(mongo);
+
+        user = userDAO.findByUsername(username2);
+        mongo.close();
+        //user.printUser();
+        System.out.println("username:\t" + username2);
+        System.out.println("password:\t" + password2);
+        if(user == null) {
+            System.out.println("NOT FOUND");
+            //TODO display 'wrong username'
+            username.setId("wrong");
+            wrong.setText("Wrong Username");
+            wrong.setId("label");
+            return false;
+        }
+        else {
+            if(user.getPassword().equals(password2)){
+                System.out.println("CORRECT");
+                //correct password
+                return true;
+            }
+            else {
+                //TODO display 'incorrect password'
+                password.setId("wrong");
+                wrong.setText("Wrong Password");
+                wrong.setId("label");
+                username.setId("nothing");
+                System.out.println("INCORRECT PASSWORD");
+                return false;
+            }
+        }
     }
 
     // When the user clicks register
-    private void registerClick() {
+    private boolean registerClick() {
+        firstName1 = fName.getText().trim();
+        lastName1 = lName.getText().trim();
+        email1 = mail.getText().trim();
+        mobileNo1 = phone.getText().trim();
+        username1 = newUser.getText().trim();
+        password1 = newPassword.getText().trim();
+        password3 = confPassword.getText().trim();
+
+        if(!password1.equals(password3)){
+            //TODO display 'passwords must match'
+        }
+
+
+
+        //TODO check if fields are valid and if password is equal to confirm password
+        user = new User();
+        user.setUsername(username1);
+        user.setEmail(email1);
+        user.setFirstName(firstName1);
+        user.setLastName(lastName1);
+        user.setMobileNo(mobileNo1);
+        user.setPassword(password1);
+        //user.setWallet(0);
+        //user.printUser();
+        MongoClient mongo = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
+        MongoDBUserDAO userDAO = new MongoDBUserDAO(mongo);
+
+        if(userDAO.findByUsername(user.getUsername()) == null) {
+            userDAO.createUser(user);
+            System.out.println("User Added Successfully with id=" + user.getId());
+
+            mongo.close();
+            return true;
+        }
+        else {
+            //TODO display 'user already exists'
+            System.out.println("User already exists");
+            mongo.close();
+            return false;
+        }
+
 
     }
 

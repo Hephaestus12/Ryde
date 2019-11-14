@@ -8,6 +8,13 @@ import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
 import com.lynden.gmapsfx.service.geocoding.GeocodingResult;
 import com.lynden.gmapsfx.service.geocoding.GeocodingService;
 import com.lynden.gmapsfx.service.geocoding.GeocodingServiceCallback;
+import com.lynden.gmapsfx.util.MarkerImageFactory;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import dao.MongoDBDriverDAO;
+import dao.MongoDBUserDAO;
+import entities.Driver;
+import entities.User;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -82,17 +89,24 @@ public class home implements Initializable, MapComponentInitializedListener{
     Label driverName;
     Label driverPhone;
     Label driverRating;
+    Label carNo;
+
+    Button startTrip;
+    Button endTrip;
 
     boolean pickup = true;
     boolean fixed = false;
     boolean notFound = false;
+
+    User user;
+    Driver driver;
 
 
     public home() {
         anchorPane = new AnchorPane();
 
         // initialize the map
-        googleMapView = new GoogleMapView(/*"en-US", ""*/);
+        googleMapView = new GoogleMapView();
         googleMapView.addMapInializedListener(this);
         googleMapView.setPrefSize(1600,1600);
 
@@ -159,6 +173,80 @@ public class home implements Initializable, MapComponentInitializedListener{
         });
     }
 
+    public home(User u){
+        user = u;
+
+        anchorPane = new AnchorPane();
+
+        // initialize the map
+        googleMapView = new GoogleMapView();
+        googleMapView.addMapInializedListener(this);
+        googleMapView.setPrefSize(1600,1600);
+
+        anchorPane.getChildren().add(googleMapView);
+
+        // drop location search option
+        dropLocationTextField = new TextField();
+        dropLocationTextField.setPromptText("Enter pickup Location");
+
+        AnchorPane.setLeftAnchor(dropLocationTextField, 70.0);
+        AnchorPane.setTopAnchor(dropLocationTextField, 300.0);
+
+        anchorPane.getChildren().add(dropLocationTextField);
+
+        // search button to search the location
+        searchDropLocation = new Button("Search Pickup Location");
+        searchDropLocation.setId("searchLocationButton");
+        anchorPane.getChildren().add(searchDropLocation);
+        AnchorPane.setLeftAnchor(searchDropLocation, 70.0);
+        AnchorPane.setTopAnchor(searchDropLocation,328.0);
+
+        // recenter the map
+        recenterTextField = new TextField();
+        recenterTextField.setPromptText("Recenter the map");
+        recenterButton = new Button("Recenter");
+        recenterButton.setId("recenterButton");
+        recenterButton.setOnAction(e -> this.recenter(recenterTextField.getText()));
+
+        AnchorPane.setLeftAnchor(recenterTextField, 70.0);
+        AnchorPane.setLeftAnchor(recenterButton, 70.0);
+
+        AnchorPane.setTopAnchor(recenterTextField, 200.0);
+        AnchorPane.setTopAnchor(recenterButton, 228.0);
+
+        anchorPane.getChildren().addAll(recenterTextField, recenterButton);
+
+        this.displayName();
+
+        searchDropLocation.setOnAction( e -> {
+            if(fixed){
+                pickupLatLong = null;
+                dropLatLong = null;
+                fixed = false;
+                pickup = true;
+                dropLocationTextField.setPromptText("Enter Pickup Location");
+                googleMap.clearMarkers();
+                searchDropLocation.setText("Search Pickup Location");
+                anchorPane.getChildren().removeAll(distanceLabel, durationLabel, fareLabel, confirmTrip);
+
+                if(notFound) {
+                    anchorPane.getChildren().removeAll(routeNotFound1, routeNotFound2);
+                    notFound = false;
+                }
+            }
+            else if(pickup)
+                searchPickupLocation(dropLocationTextField.getText());
+            else {
+                try {
+                    searchDrop(dropLocationTextField.getText());
+                } catch (IOException | JSONException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+    }
+
     // recenter the map to the specified address
     private void recenter(String recenterText) {
 
@@ -177,8 +265,7 @@ public class home implements Initializable, MapComponentInitializedListener{
     }
 
     private void confirm() {
-        this.driverDetails();
-        if(walletBalance < 300) {
+        if(user.getWallet() < 300) {
             insufficientLabel = new Label("You need a minimum balance of 300 to make a booking.");
             insufficientLabel.setId("walletBalanceInsufficient");
 
@@ -187,7 +274,7 @@ public class home implements Initializable, MapComponentInitializedListener{
 
             anchorPane.getChildren().add(insufficientLabel);
         }
-        else if(fare > walletBalance) {
+        else if(fare > user.getWallet()) {
             insufficientLabel = new Label("Wallet Balance insufficient for the trip");
             insufficientLabel.setId("walletBalanceInsufficient");
 
@@ -200,44 +287,105 @@ public class home implements Initializable, MapComponentInitializedListener{
             confirmTrip.setText("Trip Confirmed");
             confirmTrip.setId("addMoneyButton");
             confirmTrip.setOnAction(e -> {});
-            walletBalance = walletBalance - fare;
-            wallet.setText("Wallet Balance : " + '\u20B9' + walletBalance);
+            this.driverDetails();
         }
     }
 
     private void driverDetails() {
+        MongoClient mongo = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
+        MongoDBDriverDAO driverDAO = new MongoDBDriverDAO(mongo);
+
+        final Driver driver = driverDAO.findClosest(pickupLatLong);
+
+        mongo.close();
+
+        MarkerOptions driverMarkerOptions = new MarkerOptions();
+        driverMarkerOptions.position(new LatLong(Double.parseDouble(driver.getLatitude()), Double.parseDouble(driver.getLongitude())))
+                .visible(Boolean.TRUE)
+                .title("Drop Marker");
+
+        Marker driverMarker = new Marker(driverMarkerOptions);
+        googleMap.addMarker(driverMarker);
+
         heading = new Label("Driver Details");
-        driverName = new Label("Name : Tej Shirish Sukhatme");
-        driverPhone = new Label("Contact no. : 9920774469");
-        driverRating = new Label("Rating : 2.0 / 5.0");
+        driverName = new Label("Name : " + driver.getName().substring(0,1).toUpperCase() + driver.getName().substring(1));
+        driverPhone = new Label("Phone : " + driver.getPhoneNo());
+        driverRating = new Label("Rating : " + driver.getRating() + " / 5");
+        carNo = new Label("Vehicle no. : " + driver.getCarNo());
 
         heading.setId("heading");
 
         driverName.setId("driverDetailsText");
         driverPhone.setId("driverDetailsText");
         driverRating.setId("driverDetailsText");
+        carNo.setId("driverDetailsText");
+
+        startTrip = new Button("Start Trip");
+        endTrip = new Button("End Trip");
+
+        startTrip.setId("tripToggle");
+        endTrip.setId("tripToggle");
+
+        HBox hBox = new HBox();
+        hBox.setId("hBox");
+        hBox.setSpacing(57.0);
+
+        hBox.getChildren().addAll(startTrip, endTrip);
 
         VBox vBox = new VBox();
         vBox.setSpacing(3.0);
-        vBox.getChildren().addAll(heading, driverName, driverPhone, driverRating);
+        vBox.getChildren().addAll(heading, driverName, driverPhone, driverRating, carNo, hBox);
         vBox.setId("driverDetails");
+
 
         AnchorPane.setLeftAnchor(vBox, 700.0);
 
         anchorPane.getChildren().add(vBox);
+
+        startTrip.setOnAction(e -> {
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
+            MongoDBDriverDAO mongoDBDriverDAO = new MongoDBDriverDAO(mongoClient);
+            mongoDBDriverDAO.makeUnavailable(driver);
+
+            startTrip.setId("tripStarted");
+            startTrip.setText("Trip Started");
+        });
+
+        endTrip.setOnAction(e -> {
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
+            MongoDBDriverDAO mongoDBDriverDAO = new MongoDBDriverDAO(mongoClient);
+            mongoDBDriverDAO.makeAvailable(driver);
+
+            walletBalance = walletBalance - fare;
+            user.cutFare(fare);
+            wallet.setText("Wallet Balance : " + '\u20B9' + user.getWallet());
+            anchorPane.getChildren().removeAll(vBox);
+            anchorPane.getChildren().removeAll(distanceLabel, fareLabel, durationLabel, confirmTrip);
+
+            pickupLatLong = null;
+            dropLatLong = null;
+            fixed = false;
+            pickup = true;
+            dropLocationTextField.setPromptText("Enter Pickup Location");
+            googleMap.clearMarkers();
+            searchDropLocation.setText("Search Pickup Location");
+
+            if(walletBalance < 300)
+                wallet.setId("walletBalanceInsufficient");
+        });
+
     }
 
     private void displayName() {
-        name = "Akash Srivastava";
+        name = user.getFirstName() + " " + user.getLastName();
         Label nameLabel = new Label("Welcome, " + name);
 
         logout = new Button("Logout");
 
-        walletBalance = 250;
 
-        wallet = new Label("Wallet Balance : " + '\u20B9' + walletBalance);
+        wallet = new Label("Wallet Balance : " + '\u20B9' + user.getWallet());
 
-        if(walletBalance < 300)
+        if(user.getWallet() < 300)
             wallet.setId("walletBalanceInsufficient");
 
         addMoney = new Button("Add money");
@@ -287,11 +435,12 @@ public class home implements Initializable, MapComponentInitializedListener{
 
     private void addToWallet() {
         try {
-            walletBalance = walletBalance + Integer.parseInt(addMoneyBy.getText());
-            wallet.setText("Wallet Balance : " + '\u20B9' + walletBalance);
+            //walletBalance = walletBalance + Integer.parseInt(addMoneyBy.getText());
+            user.addMoney(Integer.parseInt(addMoneyBy.getText()));
+            wallet.setText("Wallet Balance : " + '\u20B9' + user.getWallet());
             anchorPane.getChildren().removeAll(addToWallet, addMoneyBy, insufficientLabel);
             AnchorPane.setTopAnchor(logout, 127.0);
-            if(walletBalance >= 300)
+            if(user.getWallet() >= 300)
                 wallet.setId("walletBalanceSufficient");
         } catch (Exception e) {
             addMoneyBy.setId("walletError");
@@ -342,7 +491,7 @@ public class home implements Initializable, MapComponentInitializedListener{
     }
 
     private void distanceDisplay() {
-        this.driverDetails();
+        // this.driverDetails();
         if(distanceString != null) {
             distanceLabel = new Label("Distance : " + distanceString);
 
