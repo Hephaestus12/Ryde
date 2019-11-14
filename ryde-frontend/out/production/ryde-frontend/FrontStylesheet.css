@@ -12,13 +12,13 @@
 }
 
 .text-field {
-    -fx-background-color: linear-gradient(to left, lavender, mediumpurple);
+    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
     -fx-text-fill: white;
     -fx-prompt-text-fill: white;
 }
 
 .password-field {
-    -fx-background-color: linear-gradient(to left, lavender, mediumpurple);
+    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
 }
 
 

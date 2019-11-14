@@ -18,7 +18,7 @@
 }
 
 .password-field {
-    -fx-background-color: linear-gradient(to left, lavender, mediumpurple);
+    -fx-background-color: linear-gradient(to right, purple, mediumpurple);
 }
 
 

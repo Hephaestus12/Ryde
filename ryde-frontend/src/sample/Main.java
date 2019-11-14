@@ -50,6 +50,7 @@ public class Main extends Application {
     private TextField username;
     private PasswordField password;
     Label wrong;
+    Label wrongRegister;
 
     private TextField fName;
     private TextField lName;
@@ -146,6 +147,9 @@ public class Main extends Application {
         // register buttonsest(Stri
         register = new Button("Register");
 
+        // label for wrong entries
+        wrongRegister = new Label();
+
         fName.setId("registration");
         lName.setId("registration");
         phone.setId("registration");
@@ -169,7 +173,8 @@ public class Main extends Application {
         GridPane.setConstraints(newPassword, 40, 52);
         GridPane.setConstraints(confPassword, 40, 53);
         GridPane.setConstraints(register, 40, 55);
-        grid.getChildren().addAll(fName, lName, mail, phone, newUser, newPassword, confPassword, line4, register);
+        GridPane.setConstraints(wrongRegister, 40, 56);
+        grid.getChildren().addAll(fName, lName, mail, phone, newUser, newPassword, confPassword, line4, register, wrongRegister);
 
         //action on clicking login/register
 
@@ -261,12 +266,6 @@ public class Main extends Application {
         password1 = newPassword.getText().trim();
         password3 = confPassword.getText().trim();
 
-        if(!password1.equals(password3)){
-            //TODO display 'passwords must match'
-        }
-
-
-
         //TODO check if fields are valid and if password is equal to confirm password
         user = new User();
         user.setUsername(username1);
@@ -280,7 +279,47 @@ public class Main extends Application {
         MongoClient mongo = MongoClients.create("mongodb+srv://tejsukhatme:sukh2sukh@cluster0-hnxyp.mongodb.net/RydeDatabase?retryWrites=true&w=majority");
         MongoDBUserDAO userDAO = new MongoDBUserDAO(mongo);
 
-        if(userDAO.findByUsername(user.getUsername()) == null) {
+        if(firstName1 == null || lastName1 == null || email1 == null || mobileNo1 == null || username1 == null || password1 == null || password3 == null) {
+            wrongRegister.setId("label");
+            wrongRegister.setText("Fill in all fields");
+            newPassword.setId("nothing");
+            confPassword.setId("nothing");
+            newUser.setId("nothing");
+            mail.setId("nothing");
+            phone.setId("nothing");
+            return false;
+        }
+        else if(!password1.equals(password3)){
+            wrongRegister.setId("label");
+            wrongRegister.setText("Passwords don't match");
+            newPassword.setId("wrong");
+            confPassword.setId("wrong");
+            newUser.setId("nothing");
+            mail.setId("nothing");
+            phone.setId("nothing");
+            return false;
+        }
+        else if(!email1.substring(email1.length() - 4).equals(".com")) {
+            wrongRegister.setId("label");
+            wrongRegister.setText("Invalid e-mail");
+            newPassword.setId("nothing");
+            confPassword.setId("nothing");
+            newUser.setId("nothing");
+            mail.setId("wrong");
+            phone.setId("nothing");
+            return false;
+        }
+        else if(mobileNo1.length() != 10 || mobileParse(mobileNo1)) {
+                wrongRegister.setId("label");
+                wrongRegister.setText("Wrong phone no.");
+                newPassword.setId("nothing");
+                confPassword.setId("nothing");
+                newUser.setId("nothing");
+                mail.setId("nothing");
+                phone.setId("wrong");
+                return false;
+        }
+        else if(userDAO.findByUsername(user.getUsername()) == null) {
             userDAO.createUser(user);
             System.out.println("User Added Successfully with id=" + user.getId());
 
@@ -289,12 +328,28 @@ public class Main extends Application {
         }
         else {
             //TODO display 'user already exists'
+            wrongRegister.setId("label");
+            wrongRegister.setText("Username already exists");
+            newUser.setId("wrong");
+            newPassword.setId("nothing");
+            confPassword.setId("nothing");
+            mail.setId("nothing");
             System.out.println("User already exists");
             mongo.close();
             return false;
         }
 
 
+    }
+
+    private boolean mobileParse(String mobileNo1) {
+        boolean x = true;
+        try {
+            Long a = Long.parseLong(mobileNo1);
+        } catch (Exception e) {
+            x = false;
+        }
+        return x;
     }
 
     // When the user clicks logout
